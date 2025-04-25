@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Врум врум</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    
+    <h1>Врум</h1>
+    <h2>Соответствие номеров и фотографий</h2>
+    <div id="reference-grid"></div>
+    <div id="custom-input-wrapper">
+        <h2>Своя матрица</h2>
+        <div id="custom-input-grid">
+            <input id="tile1" maxlength="1" />
+            <input id="tile2" maxlength="1" />
+            <input id="tile3" maxlength="1" />
+            <input id="tile4" maxlength="1" />
+            <input id="tile5" maxlength="1" />
+            <input id="tile6" maxlength="1" />
+            <input id="tile7" maxlength="1" />
+            <input id="tile8" maxlength="1" />
+            <input id="tile9" maxlength="1" />
+        </div>
+        <button onclick="readCustomMatrix()">Загрузить матрицу</button>
+        <br>
+        <button id="solveButton">Решить</button>
+    </div>
+
+    <h2>Матрица игры:</h2>
+    <div id="puzzle">
+        <div class="tile" data-index="0"></div>
+        <div class="tile" data-index="1"></div>
+        <div class="tile" data-index="2"></div>
+        <div class="tile" data-index="3"></div>
+        <div class="tile" data-index="4"></div>
+        <div class="tile" data-index="5"></div>
+        <div class="tile" data-index="6"></div>
+        <div class="tile" data-index="7"></div>
+        <div class="tile" data-index="8"></div>
+    </div>
+
+    <ul id="stepsList"></ul>
+
+    <script src="script.js"></script>
+</body>
+</html>
