@@ -7,11 +7,33 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
+
+
     <h1>Врум</h1>
-    <h2>Соответствие номеров и фотографий</h2>
     <div id="reference-grid"></div>
-    <div id="custom-input-wrapper">
+    
+    <div class="puzzle-constructor">
+        <div class="constructor-container">
+            <h2>Доступные блоки</h2>
+            <div id="source-blocks" class="blocks-container">
+                
+            </div>
+        </div>
+        
+        <div class="constructor-container">
+            <h2>Ваша мозаика</h2>
+            <div id="target-grid" class="blocks-container">
+
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls-container">
+        <button id="buildPuzzleButton" class="action-button">Собрать мозаику</button>
+        <button id="resetPuzzleButton" class="action-button reset-button">Сбросить</button>
+    </div>
+    
+    <div id="custom-input-wrapper" style="display: none;">
         <h2>Своя матрица</h2>
         <div id="custom-input-grid">
             <input id="tile1" maxlength="1" />

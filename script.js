@@ -10,6 +10,9 @@ const MOVES = {
 };
 
 
+let targetGridState = Array(9).fill(null);
+
+
 function manhattan(state) {
     let distance = 0;
     for (let i = 0; i < state.length; i++) {
@@ -101,12 +104,30 @@ function displaySolution(solution) {
         alert("Невозможно решить задачу.");
         return;
     }
+    
+
+    const header = document.createElement('h3');
+    header.textContent = 'Шаги для решения:';
+    stepsContainer.before(header);
 
     solution.forEach((step, index) => {
         const stepItem = document.createElement('li');
-        stepItem.textContent = `Шаг ${index + 1}: Двигаться ${step.move}`;
+        
+
+        let moveDescription = '';
+        switch(step.move) {
+            case '←': moveDescription = 'Переместить ячейку ←'; break;
+            case '→': moveDescription = 'Переместить ячейку →'; break;
+            case '↑': moveDescription = 'Переместить ячейку ↑'; break;
+            case '↓': moveDescription = 'Переместить ячейку ↓'; break;
+        }
+        
+        stepItem.textContent = `Шаг ${index + 1}: ${moveDescription}`;
         stepsContainer.appendChild(stepItem);
     });
+    
+
+    stepsContainer.scrollIntoView({ behavior: 'smooth' });
 }
 
 
@@ -188,4 +209,225 @@ function renderReferenceGrid() {
         container.appendChild(tile);
     }
 }
-renderReferenceGrid();
+
+
+function initDraggableBlocks() {
+    const sourceContainer = document.getElementById('source-blocks');
+    const targetContainer = document.getElementById('target-grid');
+    
+
+    sourceContainer.innerHTML = '';
+    targetContainer.innerHTML = '';
+    
+
+    for (let i = 1; i <= 9; i++) {
+        const block = document.createElement('div');
+        block.classList.add('draggable-tile');
+        block.setAttribute('draggable', 'true');
+        block.dataset.value = i;
+        
+
+        if (i !== 9) {
+            block.style.backgroundImage = `url('images/${i}.png')`;
+        } else {
+            block.classList.add('empty');
+        }
+        
+
+        block.addEventListener('dragstart', dragStart);
+        block.addEventListener('dragend', dragEnd);
+        
+        sourceContainer.appendChild(block);
+    }
+    
+
+    for (let i = 0; i < 9; i++) {
+        const dropZone = document.createElement('div');
+        dropZone.classList.add('drop-zone');
+        dropZone.dataset.index = i;
+        
+
+        dropZone.addEventListener('dragover', dragOver);
+        dropZone.addEventListener('dragenter', dragEnter);
+        dropZone.addEventListener('dragleave', dragLeave);
+        dropZone.addEventListener('drop', drop);
+        
+        targetContainer.appendChild(dropZone);
+    }
+    
+
+    targetGridState = Array(9).fill(null);
+}
+
+
+function dragStart(e) {
+    this.classList.add('dragging');
+    e.dataTransfer.setData('text/plain', this.dataset.value);
+}
+
+function dragEnd() {
+    this.classList.remove('dragging');
+}
+
+function dragOver(e) {
+    e.preventDefault();
+}
+
+function dragEnter(e) {
+    e.preventDefault();
+    this.classList.add('highlight');
+}
+
+function dragLeave() {
+    this.classList.remove('highlight');
+}
+
+function drop(e) {
+    e.preventDefault();
+    this.classList.remove('highlight');
+    
+    const tileValue = parseInt(e.dataTransfer.getData('text/plain'));
+    const dropIndex = parseInt(this.dataset.index);
+    
+
+    if (targetGridState[dropIndex] !== null) {
+        return;
+    }
+    
+
+    targetGridState[dropIndex] = tileValue;
+    
+
+    const newTile = document.createElement('div');
+    newTile.classList.add('draggable-tile');
+    newTile.dataset.value = tileValue;
+    
+    if (tileValue !== 9) {
+        newTile.style.backgroundImage = `url('images/${tileValue}.png')`;
+    } else {
+        newTile.classList.add('empty');
+    }
+    
+
+    this.innerHTML = '';
+    this.appendChild(newTile);
+    
+
+    const sourceBlock = document.querySelector(`#source-blocks .draggable-tile[data-value="${tileValue}"]`);
+    if (sourceBlock) {
+        sourceBlock.remove();
+    }
+}
+
+function buildPuzzle() {
+
+    if (targetGridState.includes(null)) {
+        alert('Пожалуйста, заполните все ячейки мозаики!');
+        return;
+    }
+    
+
+    for (let i = 0; i < 9; i++) {
+        document.getElementById(`tile${i+1}`).value = targetGridState[i];
+    }
+    
+
+    updateBoard(targetGridState);
+    const solution = solve(targetGridState);
+    displaySolution(solution);
+    
+    if (solution) {
+
+        let stepIndex = 0;
+        const interval = setInterval(() => {
+            if (stepIndex < solution.length) {
+
+                const stepItems = document.querySelectorAll('#stepsList li');
+                stepItems.forEach((item, idx) => {
+                    if (idx === stepIndex) {
+                        item.classList.add('current-step');
+                    } else {
+                        item.classList.remove('current-step');
+                    }
+                });
+                
+
+                const currentState = stepIndex > 0 ? solution[stepIndex-1].state : targetGridState;
+                const nextState = solution[stepIndex].state;
+                const emptyBefore = currentState.indexOf(9);
+                const emptyAfter = nextState.indexOf(9);
+                
+
+                const movingTileValue = currentState[emptyAfter];
+                
+
+                const tiles = document.querySelectorAll('.tile');
+                tiles.forEach(tile => {
+                    const index = parseInt(tile.getAttribute('data-index'));
+                    
+
+                    if (index === emptyAfter) {
+                        tile.classList.add('moving-tile');
+                        setTimeout(() => {
+                            tile.classList.remove('moving-tile');
+                        }, 800);
+                    }
+                });
+                
+
+                updateBoard(nextState);
+                stepIndex++;
+            } else {
+                clearInterval(interval);
+
+                const completionMessage = document.createElement('div');
+                completionMessage.classList.add('completion-message');
+                completionMessage.textContent = 'Мозаика собрана!';
+                document.querySelector('#puzzle').after(completionMessage);
+                setTimeout(() => {
+                    completionMessage.classList.add('show');
+                }, 100);
+            }
+        }, 1200);
+    }
+}
+
+
+function resetPuzzle() {
+
+    const stepsContainer = document.getElementById("stepsList");
+    stepsContainer.innerHTML = '';
+    
+
+    const header = stepsContainer.previousElementSibling;
+    if (header && header.tagName === 'H3') {
+        header.remove();
+    }
+    
+
+    const completionMessage = document.querySelector('.completion-message');
+    if (completionMessage) {
+        completionMessage.remove();
+    }
+    
+
+    const tiles = document.querySelectorAll('.tile');
+    tiles.forEach(tile => {
+        tile.classList.remove('empty');
+        tile.classList.remove('moving-tile');
+        tile.style.backgroundImage = '';
+    });
+    
+
+    initDraggableBlocks();
+}
+
+
+window.addEventListener('DOMContentLoaded', () => {
+    
+    initDraggableBlocks();
+    
+
+    document.getElementById('buildPuzzleButton').addEventListener('click', buildPuzzle);
+    document.getElementById('resetPuzzleButton').addEventListener('click', resetPuzzle);
+});

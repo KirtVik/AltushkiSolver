@@ -169,48 +169,7 @@ button:hover {
 }
 
 
-#reference-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(3, 100px);
-    gap: 4px;
-    margin-bottom: 25px;
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 8px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-}
 
-.reference-tile {
-    width: 100px;
-    height: 100px;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.3s ease;
-}
-
-.reference-tile:hover {
-    transform: scale(1.05);
-}
-
-.reference-tile::after {
-    content: attr(data-label);
-    position: absolute;
-    bottom: 4px;
-    right: 6px;
-    background: rgb(0, 0, 0);
-    padding: 2px 6px;
-    font-size: 14px;
-    border-radius: 4px;
-    color: #fff;
-}
 
 #stepsList {
     list-style-type: none;
@@ -254,6 +213,15 @@ button:hover {
     text-decoration: line-through; 
 }
 
+#stepsList li.current-step {
+    background: rgba(52, 152, 219, 0.4);
+    color: #ffffff;
+    transform: translateX(10px);
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.6);
+    border-left: 4px solid #3498db;
+    font-weight: bold;
+}
+
 
 #stepsList .action-btn {
     background-color: #3498db;
@@ -270,6 +238,156 @@ button:hover {
 #stepsList .action-btn:hover {
     background-color: #2980b9;
 }
+
+
+.puzzle-constructor {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 900px;
+    margin: 30px 0;
+    gap: 20px;
+}
+
+.constructor-container {
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.constructor-container h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.blocks-container {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    min-height: 324px;
+}
+
+.draggable-tile {
+    width: 100px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.draggable-tile:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+}
+
+.draggable-tile.dragging {
+    opacity: 0.6;
+    transform: scale(1.1);
+}
+
+.drop-zone {
+    width: 100px;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+.drop-zone.highlight {
+    background-color: rgba(52, 152, 219, 0.3);
+    border-color: #3498db;
+}
+
+.controls-container {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.action-button {
+    background-color: #3498db;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.action-button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.reset-button {
+    background-color: #e74c3c;
+    margin-left: 15px;
+}
+
+.reset-button:hover {
+    background-color: #c0392b;
+}
+
+
+.moving-tile {
+    animation: pulse 0.8s ease-in-out;
+    box-shadow: 0 0 20px rgba(52, 152, 219, 0.8);
+    z-index: 10;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+
+.completion-message {
+    background-color: rgba(46, 204, 113, 0.8);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+.completion-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 @keyframes gradientShift {
     0% {
         background: linear-gradient(135deg, #1f1c2c, #928DAB);
