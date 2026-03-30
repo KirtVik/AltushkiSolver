@@ -102,7 +102,6 @@ button {
     color: white;
     cursor: pointer;
     font-weight: bold;
-    width: 200px;
 }
 
 button:hover {
@@ -128,89 +127,69 @@ button:hover {
 }
 
 
-#custom-input-wrapper {
-    margin: 20px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#custom-input-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(3, 100px);
-    gap: 4px;
-    margin-bottom: 20px;
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 8px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-}
-
-#custom-input-grid input {
-    width: 100%;
-    height: 100%;
-    font-size: 32px;
-    font-weight: bold;
-    text-align: center;
-    border: none;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
-    transition: all 0.3s ease;
-}
-
-#custom-input-grid input:focus {
-    outline: none;
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
-}
-
-
-
 
 #stepsList {
     list-style-type: none;
-    padding: 0;
-    margin: 0;
-    max-width: 600px; 
-    width: 30%;
-    margin: 0 auto;
+    padding: 20px;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 800px; 
     background: rgba(0, 0, 0, 0.2); 
     border-radius: 10px; 
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-    padding: 20px;
     color: #fff;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    max-height: 400px;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
+#stepsList::-webkit-scrollbar {
+    width: 8px;
+}
+#stepsList::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
 
 #stepsList li {
     padding: 12px 16px;
-    margin-bottom: 10px;
+    margin-bottom: 0;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 18px;
-    font-weight: bold;
-    transition: all 0.3s ease;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border-left: 4px solid transparent;
 }
-
 
 #stepsList li:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateX(5px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    background: rgba(52, 152, 219, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+    border-left: 4px solid #3498db;
 }
 
+.step-num {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+.step-desc {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+}
 
 #stepsList li.completed {
     background: rgba(46, 204, 113, 0.2);
-    color: #2ecc71;
-    text-decoration: line-through; 
+    border-left-color: #2ecc71;
 }
 
 #stepsList li.current-step {
@@ -337,6 +316,15 @@ button:hover {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    
+    /* Perfect vertical & horizontal centering */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    white-space: nowrap;
+    height: 54px;
+    box-sizing: border-box;
 }
 
 .action-button:hover {
@@ -347,7 +335,13 @@ button:hover {
 
 .reset-button {
     background-color: #e74c3c;
-    margin-left: 15px;
+}
+
+#replayPuzzleButton {
+    background-color: #f39c12;
+}
+#replayPuzzleButton:hover {
+    background-color: #e67e22;
 }
 
 .reset-button:hover {
@@ -387,7 +381,6 @@ button:hover {
     opacity: 1;
     transform: translateY(0);
 }
-
 @keyframes gradientShift {
     0% {
         background: linear-gradient(135deg, #1f1c2c, #928DAB);
@@ -397,5 +390,211 @@ button:hover {
     }
     100% {
         background: linear-gradient(135deg, #1f1c2c, #928DAB);
+    }
+}
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2em;
+    }
+    
+    .puzzle-constructor {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .constructor-container {
+        width: 100%;
+        max-width: 320px;
+        box-sizing: border-box;
+    }
+
+    .controls-container {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+        gap: 10px;
+    }
+    
+    .action-button, .reset-button {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    #stepsList {
+        width: 100%;
+        max-width: none;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        padding: 15px;
+        gap: 8px;
+    }
+
+    #stepsList li {
+        padding: 10px;
+    }
+    .step-desc {
+        font-size: 14px;
+    }
+
+    /* Уменьшение тайлов на маленьких телефонах, если нужно */
+    .blocks-container, #puzzle {
+        grid-template-columns: repeat(3, 80px);
+        grid-template-rows: repeat(3, 80px);
+    }
+    .draggable-tile, .drop-zone, .tile {
+        width: 80px;
+        height: 80px;
+        font-size: 28px;
+    }
+}
+
+/* Premium Animation Controls */
+.animation-controls {
+    display: none; /* flex (handled via JS) */
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 10px auto 30px;
+    background: rgba(44, 62, 80, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 10px 18px;
+    border-radius: 30px;
+    width: fit-content;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.icon-button {
+    background-color: transparent;
+    color: #bdc3c7;
+    border: none;
+    padding: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.icon-button span {
+    font-size: 15px;
+    font-weight: 800;
+    font-family: inherit;
+    letter-spacing: -0.5px;
+    z-index: 2;
+}
+
+.icon-button svg {
+    z-index: 2;
+}
+
+.icon-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    border-radius: 50%;
+    transition: opacity 0.2s ease;
+    z-index: 1;
+}
+
+.icon-button:hover::before {
+    opacity: 1;
+}
+
+.icon-button:hover {
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.icon-button:active {
+    transform: scale(0.9) translateY(0);
+}
+
+.icon-button.active {
+    background-color: #3498db;
+    color: white;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.5);
+    transform: scale(1.05);
+}
+
+.icon-button.skip-btn:hover {
+    color: #e74c3c;
+    background: rgba(231, 76, 60, 0.15);
+}
+
+/* Mobile Responsiveness for controls */
+@media (max-width: 400px) {
+    .animation-controls {
+        gap: 8px;
+        padding: 8px 12px;
+    }
+    .icon-button {
+        width: 44px;
+        height: 44px;
+    }
+    .icon-button span {
+        font-size: 14px;
+    }
+}
+
+/* Toast Notification Popup - Sidebar UI */
+.toast-success, .toast-error {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    left: auto;
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(120%);
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    max-width: 350px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.toast-success {
+    background: rgba(46, 204, 113, 0.9);
+    border-left: 6px solid #27ae60;
+}
+
+.toast-error {
+    background: rgba(231, 76, 60, 0.9);
+    border-left: 6px solid #c0392b;
+}
+
+.toast-success.show, .toast-error.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+@media (max-width: 600px) {
+    .toast-success, .toast-error {
+        top: 20px;
+        right: 15px;
+        left: 15px;
+        max-width: none;
+        transform: translateY(-150%) scale(0.9);
+        padding: 14px 20px;
+        font-size: 15px;
+    }
+    .toast-success.show, .toast-error.show {
+        transform: translateY(0) scale(1);
     }
 }
